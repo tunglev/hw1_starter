@@ -29,23 +29,40 @@ public class ExpenseTrackerTest {
     assertEquals(0, view.getTransactions().size());
   }
 
+  private void testAddTransactionHelper(double amount, String category) {
+	    // Check the pre-conditions
+	    assertEquals(0, view.getTransactions().size());
+		
+	    // Create a new transaction and add it
+	    Transaction transaction = new Transaction(amount, category);
+	    view.addTransaction(transaction);
+
+	    // Check the post-conditions: 
+	    // Verify that the transaction was added appropriately
+	    java.util.List<Transaction> transactions = view.getTransactions();
+	    assertEquals(1, transactions.size());
+	    assertEquals(amount, transactions.get(0).getAmount(), 0.001);
+	    assertEquals(category, transactions.get(0).getCategory());
+	    assertEquals(amount, view.computeTransactionsTotalCost(), 0.001);
+  }
+  
   @Test
   public void testAddTransaction() {
-    // Check the pre-conditions
-    assertEquals(0, view.getTransactions().size());
-	
-    // Create a new transaction and add it
-    double amount = 100.0;
-    String category = "Food";
-    Transaction transaction = new Transaction(amount, category);
-    view.addTransaction(transaction);
-
-    // Check the post-conditions: 
-    // Verify that the transaction was added appropriately
-    java.util.List<Transaction> transactions = view.getTransactions();
-    assertEquals(1, transactions.size());
-    assertEquals(amount, transactions.get(0).getAmount(), 0.001);
-    assertEquals(category, transactions.get(0).getCategory());
-    assertEquals(amount, view.computeTransactionsTotalCost(), 0.001);
+	  double amount = 100.0;
+	  String category = "Food";
+	  this.testAddTransactionHelper(amount, category);
+  }
+  
+  @Test
+  public void testRemoveTransaction() {
+	  // Initialize: Add a new transaction
+	  double amount = 100.0;
+	  String category = "Food";
+	  this.testAddTransactionHelper(amount, category);
+	  // Remove that transaction
+	  view.removeTransaction(0);
+	  // Check the post-conditions
+	  assertEquals(0, view.getTransactions().size());
+	  assertEquals(0, view.computeTransactionsTotalCost(), 0.001);
   }
 }
