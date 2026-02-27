@@ -1,0 +1,110 @@
+<project name="ExpenseTrackerApp" default="compile" basedir=".">
+
+	<property name="checkstyle.jar" value="lib/checkstyle-13.2.0-all.jar"/>
+  
+<!-- Clean up -->
+    <target name="clean" description="Clean">
+        <delete dir="bin"/>
+    	<delete dir="build"/>
+        <delete dir="jdoc"/>
+    </target>
+
+<!-- Initialize build -->
+    <target name="init">
+        <mkdir dir="bin"/>
+    	<mkdir dir="build"/>
+		<mkdir dir="jdoc"/>
+    </target>
+
+<!-- Generate the documentation based on the javadoc comments -->
+    <target name="document" depends="init" description="Generate
+    documentation for all sources">
+        <javadoc defaultexcludes="yes"
+		 destdir="jdoc"
+		 author="true"
+		 version="true"
+		 access="private"
+		 use="true"
+		 windowtitle="CS520 - Homework 1">
+	    <fileset dir="src"/>
+	</javadoc>
+    </target>
+
+<!-- Compile the project -->
+    <target name="compile" depends="init" description="Compile all sources">
+        <javac includeantruntime="true" 
+               srcdir="src"
+               destdir="bin"
+               debug="yes">
+	    <classpath path="bin"/>
+        </javac>
+    </target>
+
+<!-- Compile the test suite -->
+    <target name="compile.tests" depends="compile" description="Compile all tests">
+        <javac includeantruntime="true" 
+               srcdir="test"
+               destdir="bin"
+               debug="yes">
+        	<classpath location="lib/ant-junitlauncher-1.10.15.jar" />
+        	<classpath location="lib/apiguardian-api-1.1.2.jar" />
+        	<classpath location="lib/junit-jupiter-api_5.14.1.jar" />
+        	<classpath location="lib/junit-jupiter-engine_5.14.1.jar" />
+        	<classpath location="lib/junit-jupiter-migrationsupport_5.14.1.jar" />
+        	<classpath location="lib/junit-jupiter-params_5.14.1.jar" />
+        	<classpath location="lib/junit-platform-commons_1.14.1.jar" />
+        	<classpath location="lib/junit-platform-engine_1.14.1.jar" />
+        	<classpath location="lib/junit-platform-launcher_1.14.1.jar" />
+        	<classpath location="lib/junit-platform-runner_1.14.1.jar" />
+        	<classpath location="lib/junit-platform-suite-api_1.14.1.jar" />
+        	<classpath location="lib/junit-platform-suite-commons_1.14.1.jar" />
+        	<classpath location="lib/junit-platform-suite-engine_1.14.1.jar" />
+        	<classpath location="lib/org.opentest4j_1.3.0.jar" />
+        </javac>
+    </target>
+
+<!-- Execute the test suite -->
+    <target name="test" depends="compile.tests" description="Run all unit tests">
+        <echo message="Running unit tests ..."/>
+        <junitlauncher printsummary="true" 
+                       haltonfailure="true">
+            <classpath path="bin"/>
+        	<classpath location="lib/ant-junitlauncher-1.10.15.jar" />
+        	<classpath location="lib/apiguardian-api-1.1.2.jar" />
+           	<classpath location="lib/junit-jupiter-api_5.14.1.jar" />
+            <classpath location="lib/junit-jupiter-engine_5.14.1.jar" />
+            <classpath location="lib/junit-jupiter-migrationsupport_5.14.1.jar" />
+            <classpath location="lib/junit-jupiter-params_5.14.1.jar" />
+            <classpath location="lib/junit-platform-commons_1.14.1.jar" />
+            <classpath location="lib/junit-platform-engine_1.14.1.jar" />
+            <classpath location="lib/junit-platform-launcher_1.14.1.jar" />
+            <classpath location="lib/junit-platform-runner_1.14.1.jar" />
+            <classpath location="lib/junit-platform-suite-api_1.14.1.jar" />
+            <classpath location="lib/junit-platform-suite-commons_1.14.1.jar" />
+            <classpath location="lib/junit-platform-suite-engine_1.14.1.jar" />
+            <classpath location="lib/org.opentest4j_1.3.0.jar" />
+			
+			<testclasses outputdir="build">
+                <fileset dir="bin">
+                    <include name="**/*Test.class"/>
+                </fileset>
+				<listener type="legacy-plain" sendSysOut="true" sendSysErr="true" />
+            </testclasses>
+        </junitlauncher>
+    </target> 
+	
+<!-- Perform linting on the project -->
+    <target name="init_lint">
+        <taskdef name="checkstyle"
+             classname="com.puppycrawl.tools.checkstyle.ant.CheckstyleAntTask"
+             classpath="${checkstyle.jar}"
+	/>
+    </target>
+    
+    <target name="lint" depends="init_lint" description="Lint all sources">
+        <checkstyle config="lib/sun_checks.xml">
+			<fileset dir="src" includes="**/*.java"/>
+			<formatter type="plain"/>
+      	</checkstyle>
+    </target>
+</project>
