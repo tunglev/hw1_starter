@@ -11,6 +11,7 @@ public class ExpenseTrackerView extends JFrame {
 
   private JTable transactionsTable;
   private JButton addTransactionBtn;
+  private JMenuItem editDeleteMenuItem;
   private JTextField amountField;
   private JTextField categoryField;
   private DefaultTableModel model;
@@ -38,6 +39,10 @@ public class ExpenseTrackerView extends JFrame {
   public JButton getAddTransactionBtn() {
     return addTransactionBtn;
   }
+  
+  public JMenuItem getDeleteMenuItem() {
+	  return editDeleteMenuItem;
+  }
 
   public DefaultTableModel getTableModel() {
     return model;
@@ -47,6 +52,14 @@ public class ExpenseTrackerView extends JFrame {
     setTitle("Expense Tracker"); // Set title
  
     this.model = model;
+    
+    // Create the top menu bar
+    JMenuBar topMenuBar = new JMenuBar();
+    JMenu editMenu = new JMenu("Edit");
+    topMenuBar.add(editMenu);
+    this.editDeleteMenuItem = new JMenuItem("Delete");
+    editMenu.add(editDeleteMenuItem);
+    setJMenuBar(topMenuBar);
 
     addTransactionBtn = new JButton("Add Transaction");
 
@@ -58,6 +71,7 @@ public class ExpenseTrackerView extends JFrame {
     categoryField = new JTextField(10);
     transactionsTable = new JTable(model);
     transactionsTable.setDefaultEditor(Object.class, null);
+    transactionsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
   
     // Layout components
     JPanel addTransactionPanel = new JPanel();
@@ -82,6 +96,21 @@ public class ExpenseTrackerView extends JFrame {
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setVisible(true);
   
+  }
+  
+  public void delete() {
+    int selectedTransactionID = this.transactionsTable.getSelectedRow();
+    // Perform input validation
+    if ((selectedTransactionID < 0) || (selectedTransactionID > transactions.size() - 1)) {
+	  displayErrorMessage("A transaction was not selected to be deleted.");
+	}
+	else {
+	  removeTransaction(selectedTransactionID); 
+	}
+  }
+  
+  public void displayErrorMessage(String message) {
+    JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
   }
 
   public void refreshTable(List<Transaction> transactions) {
@@ -120,6 +149,11 @@ public class ExpenseTrackerView extends JFrame {
     transactions.add(t);
     getTableModel().addRow(new Object[]{t.getAmount(), t.getCategory(), t.getTimestamp()});
     refresh();
+  }
+  
+  public void removeTransaction(int transactionID) {
+	  transactions.remove(transactionID);
+	  refresh();
   }
   
   public double computeTransactionsTotalCost() {

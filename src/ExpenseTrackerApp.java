@@ -34,6 +34,11 @@ public class ExpenseTrackerApp {
       // Call controller to add transaction
       view.addTransaction(t);
     });
+    
+    // Handle "Delete" menu item clicks
+    view.getDeleteMenuItem().addActionListener(e -> {
+    	view.delete();
+    });
 
   }
 
