@@ -1,0 +1,18 @@
+# Ignore build folders
+# jdoc/
+bin/
+
+# Ignore config files
+application.properties
+
+# Ignore IDE files
+.settings/
+.classpath
+.project
+.idea/
+*.iml
+*.class
+
+# Ignore dependency caches
+node_modules/
+.mvn
