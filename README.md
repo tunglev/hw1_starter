@@ -31,6 +31,10 @@ The Expense Tracker application has the following structure:
 - `build.xml`: Is the ant build tool input file
 - `build/`: Contains the ant build tool output files
 
+The build requirements are:
+- JDK 21+: Generate API doc (javadoc), compile (javac), run (java)
+- Ant 1.10.15+: Build and run the application and test suite(s)
+
 From the root directory (containing the build.xml file):
 
 1. Build app: `ant compile`
