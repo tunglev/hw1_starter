@@ -37,7 +37,7 @@ From the root directory (containing the build.xml file):
 
 2. Run the app: `java -cp bin ExpenseTrackerApp`
 
-3. Build and run tests: `ant test`
+3. Build and run tests: `ant test` (See the build/TEST-*.txt files for more details.)
 
 4. Generate Javadoc: `ant document`
 
