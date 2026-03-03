@@ -11,9 +11,15 @@ public class Transaction {
   private String timestamp;
 
   public Transaction(double amount, String category) {
-    this.amount = amount;
-    this.category = category;
-    this.timestamp = generateTimestamp();
+	  this.amount = amount;
+	  this.category = category;
+	  this.timestamp = this.generateTimestamp();
+  }
+  
+  /* package */ Transaction(double amount, String category, String timestamp) {
+	  this.amount = amount;
+	  this.category = category;
+	  this.timestamp = timestamp;
   }
 
   public double getAmount() {

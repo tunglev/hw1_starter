@@ -11,6 +11,8 @@ public class ExpenseTrackerView extends JFrame {
 
   private JTable transactionsTable;
   private JButton addTransactionBtn;
+  private JMenuItem fileOpenFileMenuItem;
+  private JMenuItem fileSaveAsMenuItem;
   private JMenuItem editDeleteMenuItem;
   private JTextField amountField;
   private JTextField categoryField;
@@ -40,6 +42,14 @@ public class ExpenseTrackerView extends JFrame {
     return addTransactionBtn;
   }
   
+  public JMenuItem getOpenFileMenuItem() {
+	  return fileOpenFileMenuItem;
+  }
+  
+  public JMenuItem getSaveAsMenuItem() {
+	  return fileSaveAsMenuItem;
+  }
+  
   public JMenuItem getDeleteMenuItem() {
 	  return editDeleteMenuItem;
   }
@@ -55,6 +65,12 @@ public class ExpenseTrackerView extends JFrame {
     
     // Create the top menu bar
     JMenuBar topMenuBar = new JMenuBar();
+    JMenu fileMenu = new JMenu("File");
+    topMenuBar.add(fileMenu);
+    this.fileOpenFileMenuItem = new JMenuItem("Open File...");
+    fileMenu.add(this.fileOpenFileMenuItem);
+    this.fileSaveAsMenuItem = new JMenuItem("Save As...");
+    fileMenu.add(this.fileSaveAsMenuItem);
     JMenu editMenu = new JMenu("Edit");
     topMenuBar.add(editMenu);
     this.editDeleteMenuItem = new JMenuItem("Delete");
@@ -96,6 +112,25 @@ public class ExpenseTrackerView extends JFrame {
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setVisible(true);
   
+  }
+  
+  public String showFileChooser(boolean isOpenFile) {
+	JFileChooser chooser = new JFileChooser();
+	int result = -1;
+	if (isOpenFile) {
+		result = chooser.showOpenDialog(this);
+	}
+	else {
+		result = chooser.showSaveDialog(this);
+	}
+	if (result == JFileChooser.APPROVE_OPTION) {
+	  String path = chooser.getSelectedFile().getAbsolutePath();
+	  if (!path.toLowerCase().endsWith(".csv")) {
+	    path = path + ".csv";
+	  }
+	  return path;
+	}
+	return null;
   }
   
   public void delete() {
