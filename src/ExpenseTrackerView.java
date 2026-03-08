@@ -17,7 +17,7 @@ public class ExpenseTrackerView extends JFrame {
   private JTextField amountField;
   private JTextField categoryField;
   private DefaultTableModel model;
-  private List<Transaction> transactions = new ArrayList<>();
+  private ExpenseTrackerModel expenseModel;
 
   
 
@@ -58,10 +58,11 @@ public class ExpenseTrackerView extends JFrame {
     return model;
   }
 
-  public ExpenseTrackerView(DefaultTableModel model) {
+  public ExpenseTrackerView(DefaultTableModel model, ExpenseTrackerModel expenseModel) {
     setTitle("Expense Tracker"); // Set title
  
     this.model = model;
+    this.expenseModel = expenseModel;
     
     // Create the top menu bar
     JMenuBar topMenuBar = new JMenuBar();
@@ -133,32 +134,24 @@ public class ExpenseTrackerView extends JFrame {
 	return null;
   }
   
-  public void delete() {
-    int selectedTransactionID = this.transactionsTable.getSelectedRow();
-    // Perform input validation
-    if ((selectedTransactionID < 0) || (selectedTransactionID > transactions.size() - 1)) {
-	  displayErrorMessage("A transaction was not selected to be deleted.");
-	}
-	else {
-	  removeTransaction(selectedTransactionID); 
-	}
+  public int getSelectedTransactionIndex() {
+    return this.transactionsTable.getSelectedRow();
   }
   
   public void displayErrorMessage(String message) {
     JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
   }
 
-  public void refreshTable(List<Transaction> transactions) {
-    // model.setRowCount(0);
+  public void refreshTable() {
     model.setRowCount(0);
     int rowNum = model.getRowCount();
-  
-    // Add rows from transactions list
+
+    List<Transaction> transactions = expenseModel.getTransactions();
     for(Transaction t : transactions) {
       model.addRow(new Object[]{rowNum+=1,t.getAmount(), t.getCategory(), t.getTimestamp()});
 
     }
-    Object[] totalRow = {"Total", null, null, computeTransactionsTotalCost()};
+    Object[] totalRow = {"Total", null, null, expenseModel.computeTransactionsTotalCost()};
     model.addRow(totalRow);
   
     // Fire table update
@@ -167,38 +160,8 @@ public class ExpenseTrackerView extends JFrame {
   }  
 
   public void refresh() {
-
-    // Get transactions from model
-    List<Transaction> transactions = getTransactions();
-  
-    // Pass to view
-    refreshTable(transactions);
-  
+    refreshTable();
   }
-
-  public List<Transaction> getTransactions() {
-    return transactions;
-  }
-  
-  public void addTransaction(Transaction t) {
-    transactions.add(t);
-    getTableModel().addRow(new Object[]{t.getAmount(), t.getCategory(), t.getTimestamp()});
-    refresh();
-  }
-  
-  public void removeTransaction(int transactionID) {
-	  transactions.remove(transactionID);
-	  refresh();
-  }
-  
-  public double computeTransactionsTotalCost() {
-    double totalCost=0;
-    for(Transaction t : transactions) {
-      totalCost+=t.getAmount();
-    }
-    return totalCost;
-  }
-  
 
 
   // Other view methods
