@@ -8,6 +8,20 @@ Rather than building brand-new user features, your task is to understand, analyz
 
 Treat this as a realistic on-boarding task: you are joining a team with shipped software, and your responsibility is to improve understandability, modularity, extensibility readiness, and testability while preserving current behavior.
 
+## System Features
+- **transaction management**: Add and remove daily transactions with amount and category.
+- **cost analysis**: View complete transaction history and calculated total cost.
+- **local saving**: Import and export transaction data using CSV files.
+- **input checking**: Input validation for amounts and file formats.
+- **timestamp tracker**: Automatically generate timestamp for all transactions.
+
+## Architecture
+The application follows the **Model-View-Controller (MVC)** architectural pattern:
+- **Model (`ExpenseTrackerModel`)**: handles the application state (list of transactions) and business logic (data manipulation, total calculation).
+- **View (`ExpenseTrackerView`)**: handles user interface, displaying the transaction table and capturing user input.
+- **Controller (`ExpenseTrackerController`)**: handles connection between View and Model. It handles user events from the View, updates the Model, and refreshes the View.
+- **Application (`ExpenseTrackerApp`)**: initializing and connecting all the MVC components together.
+
 ## Getting Started
 1. Clone the repository: `git clone https://github.com/CS520-Spring2026/hw1_starter`
 2. Read this `README.md` file.
