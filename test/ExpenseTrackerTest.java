@@ -7,18 +7,16 @@ import org.junit.jupiter.api.Test;
 
 public class ExpenseTrackerTest {
 
-  private ExpenseTrackerView view;
-  private ExpenseTrackerApp app;
+  private ExpenseTrackerModel model;
 
   @BeforeEach
   public void setup() {
+    model = new ExpenseTrackerModel();
     DefaultTableModel tableModel = new DefaultTableModel();
     tableModel.addColumn("Serial");
     tableModel.addColumn("Amount");
     tableModel.addColumn("Category");
     tableModel.addColumn("Date");
-    view = new ExpenseTrackerView(tableModel);
-    app = new ExpenseTrackerApp();
   }
   
   @Test
@@ -26,24 +24,24 @@ public class ExpenseTrackerTest {
     // There aren't any pre-conditions to be checked
     // The setup method called the constructors
     // Check the post-conditions
-    assertEquals(0, view.getTransactions().size());
+    assertEquals(0, model.getTransactions().size());
   }
 
   private void testAddTransactionHelper(double amount, String category) {
 	    // Check the pre-conditions
-	    assertEquals(0, view.getTransactions().size());
+	    assertEquals(0, model.getTransactions().size());
 		
 	    // Create a new transaction and add it
 	    Transaction transaction = new Transaction(amount, category);
-	    view.addTransaction(transaction);
+	    model.addTransaction(transaction);
 
 	    // Check the post-conditions: 
 	    // Verify that the transaction was added appropriately
-	    java.util.List<Transaction> transactions = view.getTransactions();
+	    java.util.List<Transaction> transactions = model.getTransactions();
 	    assertEquals(1, transactions.size());
 	    assertEquals(amount, transactions.get(0).getAmount(), 0.001);
 	    assertEquals(category, transactions.get(0).getCategory());
-	    assertEquals(amount, view.computeTransactionsTotalCost(), 0.001);
+	    assertEquals(amount, model.computeTransactionsTotalCost(), 0.001);
   }
   
   @Test
@@ -60,9 +58,9 @@ public class ExpenseTrackerTest {
 	  String category = "Food";
 	  this.testAddTransactionHelper(amount, category);
 	  // Remove that transaction
-	  view.removeTransaction(0);
+	  model.removeTransaction(0);
 	  // Check the post-conditions
-	  assertEquals(0, view.getTransactions().size());
-	  assertEquals(0, view.computeTransactionsTotalCost(), 0.001);
+	  assertEquals(0, model.getTransactions().size());
+	  assertEquals(0, model.computeTransactionsTotalCost(), 0.001);
   }
 }
